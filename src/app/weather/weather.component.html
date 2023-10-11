@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="dropdown-block">
+    <label class="title">Sélectionner votre ville</label>
+    <div class="search">
+      <input name="search" class="input" type="text"
+        (change)="showWeatherData()"
+        [(ngModel)]="selectedValue" list="cities-list"/>
+    </div>
+  </div>
+  <datalist id="cities-list" class="list-group">
+    <select>
+      <option *ngFor="let item of options; let index = index" class="item list-group-item">
+        {{ item.nm }}
+      </option>
+    </select>
+  </datalist>
+  <div *ngIf="loading else weatherDetails">
+    <img src="assets/images/loading.svg">
+  </div>
+  <ng-template #weatherDetails>
+    <div class="weather">
+      <div class="current">
+        <div class="cityName">
+          {{currentWeather.name}}
+        </div>
+        <div class="wi wi-icon-{{currentWeather.weather[0].id}}">
+          <b>{{currentWeather.main.temp}} &deg;</b>
+        </div>
+      </div>
+      <div class="forecast">
+        <ng-container *ngFor="let item of forecast | keyvalue">
+          <div class="day" *ngIf="item.value.id !== 0 && item.value.id < 4">
+            {{item.key | date: "EEE"}}
+          </div>
+        </ng-container>
+      </div>
+      <div class="forecast-details">
+        <ng-container *ngFor="let item of forecast | keyvalue">
+          <div class="day-details" *ngIf="item.value.id !== 0 && item.value.id < 4">
+            <div class="wi wi-icon-{{item.value.iconId}} temp"></div>
+            <div class="temp">{{item.value.high}} &deg;</div>
+            <div>{{item.value.low}} &deg;</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-template>
+</div>
